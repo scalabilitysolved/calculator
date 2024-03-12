@@ -1,32 +1,10 @@
-package cmd
+package calc
 
 import (
 	"fmt"
 	"math"
 	"testing"
 )
-
-func TestExpectedErrors(t *testing.T) {
-	tests := []string{
-		"2 + a",
-		"2 + a + b / c",
-		"",
-		"3 +",
-		"", "9 * ",
-		"9 *** 9",
-	}
-	for _, test := range tests {
-		testName := fmt.Sprintf("%s produces error", test)
-		t.Run(testName, func(t *testing.T) {
-			_, err := Calculator{}.calculate(test)
-
-			if err == nil {
-				t.Errorf("Expected invalid input state for %s", test)
-			}
-
-		})
-	}
-}
 
 func TestAddition(t *testing.T) {
 
@@ -106,6 +84,28 @@ func TestOperatorPrecedence(t *testing.T) {
 	executeTests(t, tests)
 }
 
+func TestExpectedErrors(t *testing.T) {
+	tests := []string{
+		"2 + a",
+		"2 + a + b / c",
+		"",
+		"3 +",
+		"", "9 * ",
+		"9 *** 9",
+	}
+	for _, test := range tests {
+		testName := fmt.Sprintf("%s produces error", test)
+		t.Run(testName, func(t *testing.T) {
+			_, err := Calculate(test)
+
+			if err == nil {
+				t.Errorf("Expected invalid input state for %s", test)
+			}
+
+		})
+	}
+}
+
 func executeTests(t *testing.T, tests []struct {
 	input    string
 	expected float64
@@ -115,7 +115,7 @@ func executeTests(t *testing.T, tests []struct {
 	for _, test := range tests {
 		testName := fmt.Sprintf("%s equals %f", test.input, test.expected)
 		t.Run(testName, func(t *testing.T) {
-			result, err := Calculator{}.calculate(test.input)
+			result, err := Calculate(test.input)
 
 			if err != nil {
 				t.Errorf("Encountered error %v", err)
