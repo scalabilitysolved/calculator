@@ -82,11 +82,7 @@ func TestExpectedErrors(t *testing.T) {
 		testName := fmt.Sprintf("%s produces error", test)
 		t.Run(testName, func(t *testing.T) {
 			_, err := Calculate(test)
-
-			if err == nil {
-				t.Errorf("Expected invalid input state for %s", test)
-			}
-
+			require.Errorf(t, err, "Expected invalid input state for %s", test)
 		})
 	}
 }
