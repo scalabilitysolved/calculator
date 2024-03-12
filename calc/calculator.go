@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-var extractOperandsAndOperators = regexp.MustCompile(`(-\d+\.\d+|-\d+|\d+\.\d+|\d+|[\+\-\*/\(\)])`)
+var extractOperandsAndOperators = regexp.MustCompile(`(-\d+\.\d+|-\d+|\d+\.\d+|\d+|[+\-*/()])`)
 
 func Calculate(input string) (float64, error) {
 	if len(input) == 0 {
