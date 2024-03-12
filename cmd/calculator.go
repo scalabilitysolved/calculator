@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-var regex = regexp.MustCompile(`(-\d+\.\d+|-\d+|\d+\.\d+|\d+|[\+\-\*/\(\)])`)
+var extractOperandsAndOperators = regexp.MustCompile(`(-\d+\.\d+|-\d+|\d+\.\d+|\d+|[\+\-\*/\(\)])`)
 
 type Calculator struct{}
 
@@ -137,7 +137,7 @@ func (c Calculator) calculate(input string) (float64, error) {
 	evaluate := func(expression string) (float64, error) {
 		// This inner function is responsible for recursively evaluating expressions within parentheses.
 		// It should call `evaluateExpression` for expressions without any parentheses.
-		parts := regex.FindAllString(expression, -1)
+		parts := extractOperandsAndOperators.FindAllString(expression, -1)
 		return c.evaluateExpression(parts)
 	}
 
