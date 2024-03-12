@@ -8,7 +8,7 @@ allowing for complex calculations.
 
 ### Features
  - Supports basic arithmetic operations: +, -, *, /
- - Handles expressions with parentheses (including nested parentheses)
+ - Handles expressions with parentheses (and nested) like `(103 * (3 / 2) + 9) + (8 + (9 * 2))`.
  - Uses Reverse Polish Notation (RPN) for evaluation
 
 ### Usage
