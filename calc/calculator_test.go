@@ -2,19 +2,16 @@ package calc
 
 import (
 	"fmt"
-	"math"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"testing"
 )
 
 func TestAddition(t *testing.T) {
 
-	tests := []struct {
-		input    string
-		expected float64
-	}{
+	tests := []testCase{
 		{"4 + 2", 6},
 		{"3 + 2 + 1", 6},
-
 		{"3 + 0", 3},
 		{"1000 + 10 + 100 + 90", 1200},
 		{"2 + -2", 0},
@@ -24,10 +21,7 @@ func TestAddition(t *testing.T) {
 }
 
 func TestSubtraction(t *testing.T) {
-	tests := []struct {
-		input    string
-		expected float64
-	}{
+	tests := []testCase{
 		{"8 - 2", 6},
 		{"10 + 2 - 1", 11},
 		{"2 + -2 - -10 + 2", 12},
@@ -39,10 +33,7 @@ func TestSubtraction(t *testing.T) {
 }
 
 func TestMultiplication(t *testing.T) {
-	tests := []struct {
-		input    string
-		expected float64
-	}{
+	tests := []testCase{
 		{"5 * 5", 25},
 		{"5 * 10", 50},
 		{"100 * 10", 1000},
@@ -53,10 +44,7 @@ func TestMultiplication(t *testing.T) {
 }
 
 func TestDivision(t *testing.T) {
-	tests := []struct {
-		input    string
-		expected float64
-	}{
+	tests := []testCase{
 		{"50 / 5", 10},
 		{"10 / 10", 1},
 		{"100 / 10", 10},
@@ -70,10 +58,7 @@ func TestDivision(t *testing.T) {
 }
 
 func TestOperatorPrecedence(t *testing.T) {
-	tests := []struct {
-		input    string
-		expected float64
-	}{
+	tests := []testCase{
 		{"(10 + 10) / 5", 4},
 		{"(10 + 10) * 5", 100},
 		{"(10 + 10) + (10 * 2)", 40},
@@ -106,25 +91,20 @@ func TestExpectedErrors(t *testing.T) {
 	}
 }
 
-func executeTests(t *testing.T, tests []struct {
+type testCase struct {
 	input    string
 	expected float64
-}) {
+}
 
-	const tolerance = 0.00001
+const delta = 0.00001
+
+func executeTests(t *testing.T, tests []testCase) {
+	t.Helper()
 	for _, test := range tests {
-		testName := fmt.Sprintf("%s equals %f", test.input, test.expected)
-		t.Run(testName, func(t *testing.T) {
+		t.Run(fmt.Sprintf("%s = %f", test.input, test.expected), func(t *testing.T) {
 			result, err := Calculate(test.input)
-
-			if err != nil {
-				t.Errorf("Encountered error %v", err)
-			}
-
-			diff := math.Abs(result - test.expected)
-			if diff > tolerance {
-				t.Errorf("got %f, want %f, difference %f exceeds tolerance %f", result, test.expected, diff, tolerance)
-			}
+			require.NoError(t, err)
+			assert.InDelta(t, test.expected, result, delta)
 		})
 	}
 }
